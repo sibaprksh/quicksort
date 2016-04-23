@@ -1,0 +1,57 @@
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+<div ng-app="app">
+  <div ng-controller="Ctrl3">
+		<div ng-reload="flag">
+			<span ng-init="time=getTime()"></span> 
+			Time {{time}} 
+		</div>     
+	 	<div>{{flag}}</div>
+
+  </div>
+</div>
+
+<script type="text/javascript">
+	angular.module('app', [])
+		.controller("Ctrl3",function Ctrl3($scope, $interval) {
+			
+		    $scope.getTime = function() {
+		        return new Date();    
+		    }
+
+		    $scope.flag = 1;
+		    $interval(function(){
+		    	$scope.flag++;
+		    },500);
+		})
+
+
+		//Usage:
+        //<div ng-reload="{{time}}"></div>
+		.directive('ngReload', function($animate) {
+	      return {
+	        multiElement: true,
+	        transclude: 'element',
+	        priority: 600,
+	        terminal: true,
+	        restrict: 'A',
+	        //$$tlb: true,
+	        link: function($scope, $element, $attr, ctrl, $transclude) {
+	            $scope.$watch($attr.ngReload, function(value) {
+					$transclude(function(clone, scope) {
+					  $element.replaceWith(clone);
+					  $element = clone;
+					});	            
+	            });
+	        } // link
+	      };
+	    });
+
+
+
+
+
+
+
+</script>
+
+
